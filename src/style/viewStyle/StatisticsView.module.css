@@ -1,0 +1,50 @@
+.topCard {
+
+    background-color: #3c3c3d;
+    color: white;
+    height: 70px;
+    ;
+}
+
+.card {
+    flex-direction: row !important;
+    justify-content: space-between;
+}
+
+.topCard input {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.epochInput {
+    display: flex;
+    flex-direction: row;
+}
+
+.epochInput input {
+    color: black;
+    line-height: 20px;
+
+}
+
+.topCard span {
+    margin-top: 0.3rem;
+
+}
+
+.epochInput .valueInput::before {
+    content: "  ";
+    width: 5rem;
+}
+
+.epochView {
+    display: flex;
+    flex-direction: column;
+    width: 55%;
+}
+
+.lineChart {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
