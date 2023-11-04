@@ -8,3 +8,7 @@ body {
     padding: 0;
     box-sizing: border-box;
 }
+.highcharts-container {
+    width: 100%;
+    height:"7rem"
+}

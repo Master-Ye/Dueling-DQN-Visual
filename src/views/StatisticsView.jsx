@@ -3,8 +3,10 @@ import { Card, CardBody } from "@nextui-org/react";
 import styles from "../style/viewStyle/StatisticsView.module.css";
 import { Input } from "@nextui-org/react";
 import EchartsComponents from "@/components/EchartsComponent";
-import { average_reward, nr_games, loss } from "@/data/statistic";
+import { rewardNum } from "@/data/statistic";
+import { average_reward, nr_games, loss ,actionNum} from "@/data/statistic";
 import HighChartsComponent from "@/components/HighchartsComponent";
+
 function StatisticsView(props) {
   const HlineOption = (name, data) => {
     let option = {
@@ -101,13 +103,13 @@ function StatisticsView(props) {
       bottom: "0px",
       containLabel: false,
     },
-    color: ["#37A2DA", "#32C5E9", "#67E0E3", "#9FE6B8"],
+    color: ["#37A2DA", "#32C5E9", "#67E0E3"],
     tooltip: {
       trigger: "axis",
       show: false,
     },
     legend: {
-      data: ["邮件", "联盟", "视频", "搜索"],
+      data: ["邮件", "联盟", "视频"],
       show: false,
     },
 
@@ -153,15 +155,7 @@ function StatisticsView(props) {
         },
         data: [550, 430, 500, 530, 390, 500, 410],
       },
-      {
-        name: "搜索",
-        type: "line",
-        stack: "总量",
-        areaStyle: {
-          normal: {},
-        },
-        data: [620, 630, 600, 730, 790, 730, 820],
-      },
+
     ],
   };
   const options2 = {
@@ -235,6 +229,78 @@ function StatisticsView(props) {
       },
     ],
   };
+  const  HAreaOption = (name, data,arr) => {
+    const option =  {
+      chart: {
+        type: 'area',
+        width: null,
+    height: "150px",
+    margin: null,
+    spacingBottom: 0,
+    spacingTop: 0,
+    spacingLeft: 0,
+    spacingRight: 0,
+      },
+      credits: {
+        enabled: false
+    },
+      colors:[
+        "#7cc380",
+        "#81acda",
+        "#f17f72"
+      ],
+      title: {
+        text: ""
+      },
+      subtitle: {
+        text: ''
+      },
+      legend:{
+        enabled:false
+      },
+      xAxis: {
+        categories: ['1750', '1800', '1850', '1900', '1950', '1999', '2050'],
+        tickmarkPlacement: 'on',
+        title: {
+          enabled: false
+        },
+        labels:{
+          enabled:false
+        }
+      },
+      yAxis: {
+        title: {
+          text: name
+        },
+        labels:{
+          enabled:false
+        }
+      },
+      tooltip: {
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:,.0f} )<br/>',
+        shared: false
+      },
+      plotOptions: {
+        area: {
+          stacking: 'percent',
+          lineColor: '#ffffff',
+          lineWidth: 1,
+          marker: {
+            lineWidth: 1,
+            lineColor: '#ffffff',
+            enabled:false
+          }
+        }
+      },
+      series: [{
+        name: arr[0],
+        data:data[0]},
+        {name: arr[1],
+        data: data[1]},
+        {name: arr[2],
+        data: data[2]   }]}
+    return option
+  }
   return (
     <div className={styles.epochView}>
       <Card className={styles.topCard}>
@@ -252,31 +318,36 @@ function StatisticsView(props) {
             option={lineOption("average_reward", average_reward)}
             width="19%"
             height="12rem"
+            border="1"
           />
           <EchartsComponents
             option={lineOption("nr_game", nr_games)}
             width="19%"
             height="12rem"
+            border="1"
           />
           <EchartsComponents
             option={lineOption("loss", loss)}
             width="19%"
             height="12rem"
+            border="1"
           />
           <EchartsComponents
             option={lineOption("nr_game", nr_games)}
             width="19%"
             height="12rem"
+            border="1"
           />
           <EchartsComponents
             option={lineOption("nr_game", nr_games)}
             width="19%"
             height="12rem"
+            border="1"
           />
         </div>
 
-        <EchartsComponents option={options1} width="100%" height="7rem" />
-        <EchartsComponents option={options2} width="100%" height="7rem" />
+        <HighChartsComponent options={HAreaOption("Action",actionNum,["NOOP","LEFT","RIGHT"])} width="100%" height="7rem" className="AreaOne"  />
+        <HighChartsComponent options={HAreaOption("Reward",rewardNum,["7","4","1"])} width="100%" height="7rem" className="AreaOne"   />
       </Card>
     </div>
   );

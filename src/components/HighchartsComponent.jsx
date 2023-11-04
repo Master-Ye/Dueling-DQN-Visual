@@ -5,8 +5,9 @@ import HighchartsReact from "highcharts-react-official";
 if (typeof Highcharts === "object") {
   HighchartsExporting(Highcharts);
 }
-const HighchartsCmponent = (props) => {
+const HighchartsComponent = (props) => {
   const { options, width, height } = props;
+
   return (
     <div>
       <HighchartsReact
@@ -23,4 +24,4 @@ const HighchartsCmponent = (props) => {
     </div>
   );
 };
-export default HighchartsCmponent;
+export default HighchartsComponent;
