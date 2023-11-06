@@ -4,36 +4,11 @@ import styles from "../style/viewStyle/StatisticsView.module.css";
 import { Input } from "@nextui-org/react";
 import EchartsComponents from "@/components/EchartsComponent";
 import { rewardNum } from "@/data/statistic";
-import { average_reward, nr_games, loss ,actionNum} from "@/data/statistic";
+import { average_reward, nr_games, loss, actionNum } from "@/data/statistic";
 import HighChartsComponent from "@/components/HighchartsComponent";
-
+import { useRef } from "react";
 function StatisticsView(props) {
-  const HlineOption = (name, data) => {
-    let option = {
-      chart: {
-        width: 325,
-        height: 400,
-      },
-      title: {
-        text: name,
-      },
-      tooltip: {
-        valueDecimals: 2,
-      },
-      xAxis: {
-        type: "number",
-      },
 
-      series: [
-        {
-          data: data,
-          lineWidth: 0.5,
-          name: "Hourly data points",
-        },
-      ],
-    };
-    return option;
-  };
   const lineOption = (name, data) => {
     let option = {
       title: {
@@ -58,15 +33,12 @@ function StatisticsView(props) {
         },
       },
       xAxis: {
-
-
         name: "Epoch",
         splitLine: {
           //网格线
           show: false,
         },
         axisLabel: {
-
           interval: 30, // 设置为 0 表示强制显示所有刻度标签
           rotate: 0, // 旋转角度
           textStyle: {
@@ -76,7 +48,6 @@ function StatisticsView(props) {
       },
 
       yAxis: {
-
         splitLine: {
           //网格线
           show: false,
@@ -155,7 +126,6 @@ function StatisticsView(props) {
         },
         data: [550, 430, 500, 530, 390, 500, 410],
       },
-
     ],
   };
   const options2 = {
@@ -229,87 +199,91 @@ function StatisticsView(props) {
       },
     ],
   };
-  const  HAreaOption = (name, data,arr) => {
-    const option =  {
+  const HAreaOption = (name, data, arr) => {
+    const option = {
       chart: {
-        type: 'area',
+        type: "area",
         width: null,
-    height: "150px",
-    margin: null,
-    spacingBottom: 0,
-    spacingTop: 0,
-    spacingLeft: 0,
-    spacingRight: 0,
+        height: "150px",
+        margin: null,
+        spacingBottom: 0,
+        spacingTop: 0,
+        spacingLeft: 0,
+        spacingRight: 0,
       },
       credits: {
-        enabled: false
-    },
-      colors:[
-        "#7cc380",
-        "#81acda",
-        "#f17f72"
-      ],
+        enabled: false,
+      },
+      navigation: {
+        buttonOptions: {
+          enabled: false, //不显示上下文菜单。要与credits.enabled: false 一起用
+        },
+      },
+      colors: ["#7cc380", "#81acda", "#f17f72"],
       title: {
-        text: ""
+        text: "",
       },
       subtitle: {
-        text: ''
+        text: "",
       },
-      legend:{
-        enabled:false
+      legend: {
+        enabled: false,
       },
       xAxis: {
-        categories: ['1750', '1800', '1850', '1900', '1950', '1999', '2050'],
-        tickmarkPlacement: 'on',
+        categories: ["1750", "1800", "1850", "1900", "1950", "1999", "2050"],
+        tickmarkPlacement: "on",
         title: {
-          enabled: false
+          enabled: false,
         },
-        labels:{
-          enabled:false
-        }
+        labels: {
+          enabled: false,
+        },
       },
       yAxis: {
         title: {
-          text: name
+          text: name,
         },
-        labels:{
-          enabled:false
-        }
+        labels: {
+          enabled: false,
+        },
       },
       tooltip: {
-        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:,.0f} )<br/>',
-        shared: false
+        pointFormat:
+          '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:,.0f} )<br/>',
+        shared: false,
       },
       plotOptions: {
         area: {
-          stacking: 'percent',
-          lineColor: '#ffffff',
+          stacking: "percent",
+          lineColor: "#ffffff",
           lineWidth: 1,
           marker: {
             lineWidth: 1,
-            lineColor: '#ffffff',
-            enabled:false
-          }
-        }
+            lineColor: "#ffffff",
+            enabled: false,
+          },
+        },
       },
-      series: [{
-        name: arr[0],
-        data:data[0]},
-        {name: arr[1],
-        data: data[1]},
-        {name: arr[2],
-        data: data[2]   }]}
-    return option
-  }
+      series: [
+        {
+          name: arr[0],
+          data: data[0],
+        },
+        { name: arr[1], data: data[1] },
+        { name: arr[2], data: data[2] },
+      ],
+    };
+    return option;
+  };
+  const echart = useRef(null);
+  console.log(echart);
+ const changeEvent = (e) => {  console.log(e.target.value);}
   return (
     <div className={styles.epochView}>
       <Card className={styles.topCard}>
         <CardBody className={styles.card}>
           <span>Statistics view</span>
-          <div className={styles.epochInput}>
-            <span>Epoch: </span>
-            <Input type="email" className={styles.valueInput} />
-          </div>
+
         </CardBody>
       </Card>
       <Card>
@@ -319,6 +293,7 @@ function StatisticsView(props) {
             width="19%"
             height="12rem"
             border="1"
+            ref={echart}
           />
           <EchartsComponents
             option={lineOption("nr_game", nr_games)}
@@ -346,8 +321,18 @@ function StatisticsView(props) {
           />
         </div>
 
-        <HighChartsComponent options={HAreaOption("Action",actionNum,["NOOP","LEFT","RIGHT"])} width="100%" height="7rem" className="AreaOne"  />
-        <HighChartsComponent options={HAreaOption("Reward",rewardNum,["7","4","1"])} width="100%" height="7rem" className="AreaOne"   />
+        <HighChartsComponent
+          options={HAreaOption("Action", actionNum, ["NOOP", "LEFT", "RIGHT"])}
+          width="100%"
+          height="7rem"
+          className="AreaOne"
+        />
+        <HighChartsComponent
+          options={HAreaOption("Reward", rewardNum, ["7", "4", "1"])}
+          width="100%"
+          height="7rem"
+          className="AreaOne"
+        />
       </Card>
     </div>
   );

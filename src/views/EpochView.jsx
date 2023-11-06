@@ -3,7 +3,7 @@ import { Card, CardBody } from "@nextui-org/react";
 import styles from "../style/viewStyle/EpochView.module.sass";
 import EchartsComponents from "@/components/EchartsComponent";
 import HighchartsCmponent from "@/components/HighchartsComponent";
-
+import { Input } from "@nextui-org/react";
 function EpochView() {
   const options =  {
 title:{
@@ -106,6 +106,10 @@ y2:20
       <Card className={styles.topCard}>
         <CardBody className={styles.card}>
           <span>Epoch view</span>
+          <div className={styles.epochInput}>
+            <span>Epoch: </span>
+            <Input onChange={(e)=>changeEvent(e)} className={styles.valueInput} />
+          </div>
         </CardBody>
       </Card>
       <Card>
