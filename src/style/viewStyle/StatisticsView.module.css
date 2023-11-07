@@ -11,21 +11,7 @@
     justify-content: space-between;
 }
 
-.topCard input {
-    width: 1.5rem;
-    height: 1.5rem;
-}
 
-.epochInput {
-    display: flex;
-    flex-direction: row;
-}
-
-.epochInput input {
-    color: black;
-    line-height: 20px;
-
-}
 
 .topCard span {
     margin-top: 0.3rem;

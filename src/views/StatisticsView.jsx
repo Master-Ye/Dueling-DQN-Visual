@@ -1,14 +1,13 @@
 import React from "react";
 import { Card, CardBody } from "@nextui-org/react";
 import styles from "../style/viewStyle/StatisticsView.module.css";
-import { Input } from "@nextui-org/react";
+
 import EchartsComponents from "@/components/EchartsComponent";
-import { rewardNum } from "@/data/statistic";
-import { average_reward, nr_games, loss, actionNum } from "@/data/statistic";
+
+import { average_reward, nr_games, loss, actionNum ,avgQ,rewardNum} from "@/data/statistic";
 import HighChartsComponent from "@/components/HighchartsComponent";
 import { useRef } from "react";
 function StatisticsView(props) {
-
   const lineOption = (name, data) => {
     let option = {
       title: {
@@ -65,141 +64,8 @@ function StatisticsView(props) {
     };
     return option;
   };
-  const options1 = {
-    backgroundColor: "#fff",
-    grid: {
-      top: "0px",
-      left: "20px",
-      right: "5px",
-      bottom: "0px",
-      containLabel: false,
-    },
-    color: ["#37A2DA", "#32C5E9", "#67E0E3"],
-    tooltip: {
-      trigger: "axis",
-      show: false,
-    },
-    legend: {
-      data: ["邮件", "联盟", "视频"],
-      show: false,
-    },
 
-    xAxis: [
-      {
-        type: "category",
-        boundaryGap: false,
-        data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
-        show: false,
-      },
-    ],
-    yAxis: [
-      {
-        type: "value",
-        show: false,
-      },
-    ],
-    series: [
-      {
-        name: "邮件",
-        type: "line",
-        stack: "总量",
-        areaStyle: {
-          normal: {},
-        },
-        data: [100, 140, 100, 100, 130, 90, 110],
-      },
-      {
-        name: "联盟",
-        type: "line",
-        stack: "总量",
-        areaStyle: {
-          normal: {},
-        },
-        data: [230, 300, 300, 140, 190, 180, 160],
-      },
-      {
-        name: "视频",
-        type: "line",
-        stack: "总量",
-        areaStyle: {
-          normal: {},
-        },
-        data: [550, 430, 500, 530, 390, 500, 410],
-      },
-    ],
-  };
-  const options2 = {
-    backgroundColor: "#fff",
-    grid: {
-      top: "0px",
-      left: "20px",
-      right: "5px",
-      bottom: "0px",
-      containLabel: false,
-    },
-    color: ["#37A2DA", "#32C5E9", "#67E0E3", "#9FE6B8"],
-    tooltip: {
-      trigger: "axis",
-      show: false,
-    },
-    legend: {
-      data: ["邮件", "联盟", "视频", "搜索"],
-      show: false,
-    },
-
-    xAxis: [
-      {
-        type: "category",
-        boundaryGap: false,
-        data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
-      },
-    ],
-    yAxis: [
-      {
-        type: "value",
-        show: false,
-      },
-    ],
-    series: [
-      {
-        name: "邮件",
-        type: "line",
-        stack: "总量",
-        areaStyle: {
-          normal: {},
-        },
-        data: [100, 140, 100, 100, 130, 90, 110],
-      },
-      {
-        name: "联盟",
-        type: "line",
-        stack: "总量",
-        areaStyle: {
-          normal: {},
-        },
-        data: [230, 300, 300, 140, 190, 180, 160],
-      },
-      {
-        name: "视频",
-        type: "line",
-        stack: "总量",
-        areaStyle: {
-          normal: {},
-        },
-        data: [550, 430, 500, 530, 390, 500, 410],
-      },
-      {
-        name: "搜索",
-        type: "line",
-        stack: "总量",
-        areaStyle: {
-          normal: {},
-        },
-        data: [620, 630, 600, 730, 790, 730, 820],
-      },
-    ],
-  };
-  const HAreaOption = (name, data, arr) => {
+  const HAreaOption = (name, data, arr,color) => {
     const option = {
       chart: {
         type: "area",
@@ -219,7 +85,7 @@ function StatisticsView(props) {
           enabled: false, //不显示上下文菜单。要与credits.enabled: false 一起用
         },
       },
-      colors: ["#7cc380", "#81acda", "#f17f72"],
+      colors: color,
       title: {
         text: "",
       },
@@ -277,13 +143,13 @@ function StatisticsView(props) {
   };
   const echart = useRef(null);
   console.log(echart);
- const changeEvent = (e) => {  console.log(e.target.value);}
+  const color1 = ["#7cc380", "#81acda", "#f17f72"];
+  const color2 = ["#f7be87", "#bbadcf", "#e2eec8"];
   return (
     <div className={styles.epochView}>
       <Card className={styles.topCard}>
         <CardBody className={styles.card}>
           <span>Statistics view</span>
-
         </CardBody>
       </Card>
       <Card>
@@ -293,7 +159,7 @@ function StatisticsView(props) {
             width="19%"
             height="12rem"
             border="1"
-            ref={echart}
+
           />
           <EchartsComponents
             option={lineOption("nr_game", nr_games)}
@@ -308,7 +174,7 @@ function StatisticsView(props) {
             border="1"
           />
           <EchartsComponents
-            option={lineOption("nr_game", nr_games)}
+            option={lineOption("avgQ",avgQ)}
             width="19%"
             height="12rem"
             border="1"
@@ -322,16 +188,18 @@ function StatisticsView(props) {
         </div>
 
         <HighChartsComponent
-          options={HAreaOption("Action", actionNum, ["NOOP", "LEFT", "RIGHT"])}
+          options={HAreaOption("Action", actionNum, ["NOOP", "LEFT", "RIGHT"],color1)}
           width="100%"
           height="7rem"
           className="AreaOne"
+
         />
         <HighChartsComponent
-          options={HAreaOption("Reward", rewardNum, ["7", "4", "1"])}
+          options={HAreaOption("Reward", rewardNum, ["7", "4", "1"],color2)}
           width="100%"
           height="7rem"
           className="AreaOne"
+
         />
       </Card>
     </div>
