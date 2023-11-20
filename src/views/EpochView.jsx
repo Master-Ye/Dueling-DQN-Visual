@@ -6,9 +6,10 @@ import { useMemo } from "react";
 import { Input } from "@nextui-org/react";
 import { actionNum, rewardNum } from "@/data/statistic";
 import { useState } from "react";
+import {RepochLineData,AepochLineData} from "@/data/epoch"
 function EpochView() {
   const [Index, setIndex] = useState(1);
-  const sLineChartOption = (name, color, data, index = 0, nameArray) => {
+  const sLineChartOption = (name, color, data, nameArray) => {
     const lineOption = {
       title: {
         text: name,
@@ -16,9 +17,7 @@ function EpochView() {
       tooltip: {
         trigger: "axis",
       },
-      legend: {
-        data: nameArray,
-      },
+
       grid: {
         left: "3%",
         right: "4%",
@@ -31,86 +30,40 @@ function EpochView() {
         },
       },
       xAxis: {
-
+        type:"value",
+        min:0,
+        max:100
       },
       yAxis: {
         type: "value",
       },
       series: [
         {
-          name: nameArray[0],
+          name: nameArray[2],
           type: "line",
           stack: "Total",
-          data: data[index][0],
+          data: data[0],
           color:color[0]
         },
         {
           name: nameArray[1],
           type: "line",
           stack: "Total",
-          data: data[index][1],
+          data: data[1],
           color:color[1]
         },
         {
-          name: nameArray[1],
+          name: nameArray[0],
           type: "line",
           stack: "Total",
-          data: data[index][2],
+          data: data[2],
           color:color[2]
         },
       ],
     };
     return lineOption;
   };
-  const option = {
-    title: {
-      text: 'Stacked Line'
-    },
-    tooltip: {
-      trigger: 'axis'
-    },
-    legend: {
-      data: ['Email', 'Union Ads', 'Video Ads']
-    },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true
-    },
-    toolbox: {
-      feature: {
-        saveAsImage: {}
-      }
-    },
-    xAxis: {
 
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: [
-      {
-        name: 'Email',
-        type: 'line',
-        stack: 'Total',
-        data: [120, 132, 101, 134, 90, 230, 210]
-      },
-      {
-        name: 'Union Ads',
-        type: 'line',
-        stack: 'Total',
-        data: [220, 182, 191, 234, 290, 330, 310]
-      },
-      {
-        name: 'Video Ads',
-        type: 'line',
-        stack: 'Total',
-        data: [150, 232, 201, 154, 190, 330, 410]
-      },
-
-    ]
-  };
   const sPineChartOption = (name, color, data, index = 0, nameArray) => {
     return {
       title: {
@@ -190,6 +143,7 @@ function EpochView() {
   };
   const color1 = ["#7cc380", "#81acda", "#f17f72"];
   const color2 = ["#f7be87", "#bbadcf", "#e2eec8"];
+  const color =["#e2eec8", "#bbadcf", "#f7be87"];
   const pineOption2 = useMemo(() => {
     return sPineChartOption("reward_dis", color2, rewardNum, Index - 1, [
       "7",
@@ -197,18 +151,32 @@ function EpochView() {
       "1",
     ]);
   }, [Index]);
-  const pineOption1 = useMemo(() => {
+
+
+  const pineOption1 = useMemo(()=>{
     return sPineChartOption("action_dis", color1, actionNum, Index - 1, [
       "NOOP",
       "LEFT",
       "RIGHT",
-    ]);
-  }, [Index]);
+    ])},[Index])
 
+  const lineOption2 =  sLineChartOption("Reward",color,RepochLineData, [
+      "7",
+      "4",
+      "1",
+    ])
+  const lineOption1 = sLineChartOption("Action",color1,AepochLineData,  [
+    "NOOP",
+    "LEFT",
+    "RIGHT",
+  ])
   const changeIndex = (e) => {
     console.log(e.target.value);
     setIndex(e.target.value);
   };
+  console.log(lineOption1)
+  console.log(pineOption1)
+  console.log(lineOption2)
   return (
     <div className={styles.epochView}>
       <Card className={styles.topCard}>
@@ -231,7 +199,7 @@ function EpochView() {
         <Card className={styles.smallCard}>
           <EchartsComponents option={pineOption1} width="30%" height="14rem" />
           <EchartsComponents
-            option={option}
+            option={lineOption1}
             width="65%"
             height="13rem"
             mt="1rem"
@@ -240,7 +208,7 @@ function EpochView() {
         <Card className={styles.smallCard}>
           <EchartsComponents option={pineOption2} width="30%" height="14rem" />
           <EchartsComponents
-            option={option}
+            option={lineOption2}
             width="65%"
             height="13rem"
             mt="1rem"
